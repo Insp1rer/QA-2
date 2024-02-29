@@ -23,28 +23,34 @@ http.onload = function () {
     for (const obj of fullArray) {
       if (obj.code && obj["Найменування товару"] && obj["Виробник товару"]) {
         if (!isNaN(obj.code)) {
-          if (Object.keys(obj).length <= 3) {
-            for (const key in obj) {
-              if (obj.hasOwnProperty(key)) {
-                const value = obj[key].toLowerCase();
+          if (obj.code % 1 === 0 && obj.code > 0) {
+            if (Object.keys(obj).length <= 3) {
+              for (const key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                  const value = obj[key].toLowerCase();
 
-                if (!uniqueValues[key]) {
-                  uniqueValues[key] = new Set();
-                }
+                  if (!uniqueValues[key]) {
+                    uniqueValues[key] = new Set();
+                  }
 
-                if (uniqueValues[key].has(value)) {
-                  console.error(
-                    `Помилка: Знайдено дубль в товарі під кодом ${obj.code}, ключ - "${key}" та значення - "${value}"`
-                  );
-                } else {
-                  uniqueValues[key].add(value);
-                  console.log(`${key} - ${value}`);
+                  if (uniqueValues[key].has(value)) {
+                    console.error(
+                      `Помилка: Знайдено дубль в товарі під кодом ${obj.code}, ключ - "${key}" та значення - "${value}"`
+                    );
+                  } else {
+                    uniqueValues[key].add(value);
+                    console.log(`${key} - ${value}`);
+                  }
                 }
               }
+            } else {
+              console.error(
+                `Кількість властивостей перевищує 3 в об'єкті з кодом - ${obj.code}`
+              );
             }
           } else {
             console.error(
-              `Кількість властивостей перевищує 3 в об'єкті з кодом - ${obj.code}`
+              "Код записаний як дробове число, менший за нуль або рівний нескінченності"
             );
           }
         } else {
