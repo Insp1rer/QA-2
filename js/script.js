@@ -21,23 +21,44 @@ http.onload = function () {
     let uniqueValues = {};
 
     for (const obj of fullArray) {
-      for (const key in obj) {
-        if (obj.hasOwnProperty(key)) {
-          const value = obj[key].toLowerCase();
+      if (obj.code && obj["Найменування товару"] && obj["Виробник товару"]) {
+        if (!isNaN(obj.code)) {
+          if (Object.keys(obj).length <= 3) {
+            for (const key in obj) {
+              if (obj.hasOwnProperty(key)) {
+                const value = obj[key].toLowerCase();
 
-          if (!uniqueValues[key]) {
-            uniqueValues[key] = new Set();
-          }
+                if (!uniqueValues[key]) {
+                  uniqueValues[key] = new Set();
+                }
 
-          if (uniqueValues[key].has(value)) {
-            console.error(
-              `Помилка: Знайдено дубль для ключа ${key} та значення ${value}`
-            );
+                if (uniqueValues[key].has(value)) {
+                  console.error(
+                    `Помилка: Знайдено дубль в товарі під кодом ${obj.code}, ключ - "${key}" та значення - "${value}"`
+                  );
+                } else {
+                  uniqueValues[key].add(value);
+                  console.log(`${key} - ${value}`);
+                }
+              }
+            }
           } else {
-            uniqueValues[key].add(value);
+            console.error(
+              `Кількість властивостей перевищує 3 в об'єкті з кодом - ${obj.code}`
+            );
           }
+        } else {
+          console.error(
+            `Помилка: Значення цього коду - "${obj.code}", воно має бути числом`
+          );
         }
+      } else {
+        console.error(
+          "Об'єкт пустий, в нього відсутня валстивість, або має некоректну назву ключа"
+        );
       }
     }
+  } else {
+    console.log("Не вдалося прочитати файл");
   }
 };
