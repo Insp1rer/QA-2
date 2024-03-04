@@ -33,7 +33,10 @@ http.onload = function () {
                     uniqueValues[key] = new Set();
                   }
 
-                  if (uniqueValues[key].has(value)) {
+                  if (
+                    uniqueValues[key].has(value) &&
+                    key !== "Виробник товару"
+                  ) {
                     console.error(
                       `Помилка: Знайдено дубль в товарі під кодом ${obj.code}, ключ - "${key}" та значення - "${value}"`
                     );
@@ -60,7 +63,7 @@ http.onload = function () {
         }
       } else {
         console.error(
-          "Об'єкт пустий, в нього відсутня валстивість, або має некоректну назву ключа"
+          "Об'єкт пустий, в нього відсутня властивість, або має некоректну назву ключа"
         );
       }
     }
